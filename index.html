@@ -6,8 +6,6 @@
 	
 	<link rel="stylesheet" href="css/normalize.css" />
 	<link rel="stylesheet" href="css/style.css" />
-
-	<script src="js/script.js"></script>
 </head>
 <body>
 	<div class="t-box">
@@ -17,12 +15,12 @@
 					<tbody>
 						<tr>
 							<td colspan="4">
-								<input id="numbersInput" type="text" value="123" />
+								<input id="numbersInput" type="text" />
 							</td>
 						</tr>
 						<tr>
 							<td colspan="2">
-								<button class="reset-button">AC</button>
+								<button id="resetButton" class="reset-button">AC</button>
 							</td>
 							<td>
 								<button class="percent-button">%</button>
@@ -56,7 +54,7 @@
 								<button data-num="6" class="number-button">6</button>
 							</td>
 							<td>
-								<button class="action-button">&minus;</button>
+								<button id="minusButton" class="action-button">&minus;</button>
 							</td>
 						</tr>
 						<tr>
@@ -70,18 +68,18 @@
 								<button data-num="3" class="number-button">3</button>
 							</td>
 							<td>
-								<button class="action-button">+</button>
+								<button id="plusButton" class="action-button">+</button>
 							</td>
 						</tr>
 						<tr>
 							<td colspan="2">
-								<button data-number="0" class="number-button">0</button>
+								<button data-num="0" class="number-button">0</button>
 							</td>
 							<td>
 								<button class="number-button">.</button>
 							</td>
 							<td>
-								<button class="action-button">=</button>
+								<button id="equalButton" class="action-button">=</button>
 							</td>
 						</tr>
 					</tbody>
@@ -89,5 +87,7 @@
 			</div>
 		</div>
 	</div>
+
+	<script src="js/script.js"></script>
 </body>
 </html>
