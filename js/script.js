@@ -60,6 +60,7 @@
         that.action = '';
         that.state = 1;
         that.firstNum = 0;
+        that.secondNum = 0;
       });
     },
     setPlus: function() {
@@ -81,6 +82,26 @@
         that.action = 'minus';        
       });
     },
+    setMultiplie: function() {
+      var that = this;
+
+      document.getElementById('multiplieButton').addEventListener('click', function(){
+        that.firstNum = parseInt(that.input.value);
+        
+        that.setSecondNumberState();
+        that.action = 'multiplie';   
+      });
+    },
+    setDivide: function() {
+      var that = this;
+
+      document.getElementById('divideButton').addEventListener('click', function(){
+        that.firstNum = parseInt(that.input.value);
+        
+        that.setSecondNumberState();
+        that.action = 'divide';   
+      });
+    },
     setEqual: function() {
       var that = this;
       
@@ -93,6 +114,10 @@
           result = that.getSum(firstNumber, secondNumber);
         } else if (that.action == 'minus') {
           result = that.getDiff(firstNumber, secondNumber);
+        } else if (that.action == 'multiplie') {
+          result = that.getMultiplie(firstNumber,secondNumber);
+        } else if (that.action == 'divide') {
+          result = that.getSplit(firstNumber, secondNumber);
         };
 
         that.setInputValue(result);
@@ -107,6 +132,8 @@
       this.setReset();
       this.setPlus();
       this.setMinus();
+      this.setMultiplie();
+      this.setDivide();
       this.setEqual();
     }
   };
