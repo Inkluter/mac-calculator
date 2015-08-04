@@ -1,4 +1,4 @@
-(function(){
+
   var calculator = {
     firstNum: 0,
     secondNum: 0,
@@ -121,6 +121,17 @@
         };
 
         that.setInputValue(result);
+        that.firstNum = result;
+      });
+    },
+    setPercentButton: function() {
+      var that = this;
+
+      document.getElementById('percentButton').addEventListener('click', function(){
+        var percent = parseInt(that.firstNum)/100;
+
+        that.setInputValue(percent);
+        that.firstNum = percent;
       });
     },
 
@@ -135,10 +146,157 @@
       this.setMultiplie();
       this.setDivide();
       this.setEqual();
+      this.setPercentButton();
     }
+  };
+  // calculator.init();
+
+
+
+
+  var calculatorView = {
+    setInputValue: function(value) {
+      var inputValue = this.input.value;
+      var newValue = inputValue + value;
+
+      if (newValue.length > 12) {
+        return;
+      };
+
+      // replace first 0 symbol
+      if (inputValue.length == 1 && inputValue.charAt(0)==0) {
+        newValue = newValue.slice(1);
+      };
+
+      this.input.value = newValue;
+
+      return value;
+    },
+    setDot: function() {
+      var inputValue = this.input.value;
+
+      if (inputValue.indexOf('.') > 0) {
+        return;
+      };
+
+      var newValue = inputValue + '.';
+
+      view.input.value = newValue;
+    },
+    getInputValue: function() {
+      return parseInt(this.input.value);
+    },
+    number: document.getElementsByClassName('number-button'),
+    input: document.getElementById('numbersInput'),
+    equal: document.getElementById('equalButton'),
+    reset: document.getElementById('resetButton'),
+    percent: document.getElementById('percentButton'),
+    divide: document.getElementById('divideButton'),
+    multiplie: document.getElementById('multiplieButton'),
+    minus: document.getElementById('minusButton'),
+    plus: document.getElementById('plusButton'),
+    dot: document.getElementById('dotButton')
   };
 
 
-  
-  calculator.init();
-})();
+
+
+  var calculatorModel = {
+    firstNumber: 0,
+    secondNumber: 0,
+    state: 1,
+    action: ''
+  };
+
+
+
+
+  var calculatorControllerFactory = function(model, view, calcBL) {
+
+    // number button
+    for (var i=0;i<view.number.length;i++) {
+      view.number[i].addEventListener('click', function() {
+        var number = this.dataset.num;
+
+        view.setInputValue(number);
+      });
+    };
+
+    // dot button
+    view.dot.addEventListener('click', function() {
+      view.setDot();
+    });
+
+    // reset button
+    view.reset.addEventListener('click', function() {
+      view.input.value = 0;
+      model.firstNumber = 0;
+      model.secondNumber = 0;
+      model.state = 1;
+      model.action = '';
+    });
+
+    // plus button
+    view.plus.addEventListener('click', function() {
+      model.firstNumber = view.getInputValue();
+      model.state = 2;
+
+      console.log(model.firstNumber);
+    });
+
+    return {
+      init: function() {
+        view.setInputValue(0);
+
+        return 0;
+      }
+    };
+  };
+
+
+
+
+  var calculatorBLfactory = function(model) {
+
+    return {
+      plus: function(a, b) {
+        var c = a + b;
+
+        return c;
+      },
+
+      minus: function(a, b) {
+        var c = a - b;
+
+        return c;
+      },
+
+      multiplie: function(a, b) {
+        var c = a * b;
+
+        return c;
+      },
+
+      divide: function(a, b) {
+        var c = a / b;
+
+        return c;
+      },
+      percent: function(a) {
+        var c = a/100;
+
+        return c;
+      }
+    }; 
+  };
+
+
+
+
+  var model = calculatorModel;
+  var view = calculatorView;
+  var calcBL = calculatorBLfactory(model);
+  var calculatorController = calculatorControllerFactory(model, view, calcBL);
+
+  calculatorController.init();
+

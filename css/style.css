@@ -77,10 +77,10 @@ html, body {
 .calculator .action-button:active {
   background: #c35f0a;
 }
-.calculator .number-button {
+.calculator .number-button, .calculator .dot-button {
   background: #e0e0e0;
 }
-.calculator .number-button:active {
+.calculator .number-button:active, .calculator .dot-button:active {
   background: #d8d8d8;
 }
 .calculator .reset-button, .calculator .percent-button {

@@ -15,7 +15,7 @@
 					<tbody>
 						<tr>
 							<td colspan="4">
-								<input id="numbersInput" type="text" />
+								<input maxlength="6" id="numbersInput" type="text" disabled />
 							</td>
 						</tr>
 						<tr>
@@ -23,7 +23,7 @@
 								<button id="resetButton" class="reset-button">AC</button>
 							</td>
 							<td>
-								<button class="percent-button">%</button>
+								<button id="percentButton" class="percent-button">%</button>
 							</td>
 							<td>
 								<button id="divideButton" class="action-button">&divide;</button>
@@ -76,7 +76,7 @@
 								<button data-num="0" class="number-button">0</button>
 							</td>
 							<td>
-								<button class="number-button">.</button>
+								<button id="dotButton" class="dot-button">.</button>
 							</td>
 							<td>
 								<button id="equalButton" class="action-button">=</button>
