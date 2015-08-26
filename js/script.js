@@ -1,7 +1,7 @@
   // TODO
   // 1 - fractions
-  // 2 - dot as first number
   // 3 - multilplie actions
+  // 2 - percents
 
 
   var calculatorView = {
@@ -57,21 +57,32 @@
 
       var newNumber;
 
+      // dot first
+      if (number == 0 && value == '.') {
+        newNumber = '0.';
+
+        return newNumber;
+      }
+
+      // null
       if (number == 0 && value == 0) {
         return 0;
       };
 
+      // only one dot symbol
       if (value == '.' && ~number.indexOf('.')) {
         return number;
       };
 
+      // max length
       if (number.length > 11) {
         return number;
       };
 
       newNumber = number + value
 
-      if (number == 0) {
+      // null first replace
+      if (number === 0) {
         newNumber = newNumber.slice(1);
       };
 
@@ -122,9 +133,21 @@
     });
 
 
+    // percent button
+    view.percent.addEventListener('click', function() {
+      model.firstNumber = model.firstNumber/100;
+      view.setInputValue(model.firstNumber);
+    });
+
+
     // plus button
     view.plus.addEventListener('click', function() {
-      setModelState(2, 'plus');
+
+      if (model.state == 1) {
+        setModelState(2, 'plus');
+      } else if (model.state == 2) {
+        console.log('!!!');
+      }
     });
     // minus button
     view.minus.addEventListener('click', function() {
