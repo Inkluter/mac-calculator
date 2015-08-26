@@ -1,176 +1,14 @@
-
-  var calculator = {
-    firstNum: 0,
-    secondNum: 0,
-    action: '',
-    state: 1, // state 1 means that we enter first number to calculate
-
-    input: document.getElementById('numbersInput'),
-    
-    
-    // setting
-    setInputValue: function(val) {
-      this.input.value = val;
-    },
-    
-
-    // base actions
-    getSum: function(a, b) {
-      return a + b;
-    },
-    getDiff: function(a, b) {
-      return a - b;
-    },
-    getMultiplie: function(a, b) {
-      return a * b;
-    },
-    getSplit: function(a, b) {
-      return a / b;
-    },
-    setSecondNumberState: function() {
-      this.state = 2;
-    },
-    
-
-    // listeners
-    setNumberButtonListeners: function() {
-      var numberButtonsList = document.getElementsByClassName('number-button');
-      var that = this;
-
-      for (var i=0;i<numberButtonsList.length;i++){
-
-        numberButtonsList[i].addEventListener('click', function(){
-          var buttonNum = this.dataset.num;
-
-          if (that.state == 1) {
-            that.firstNum += buttonNum;
-            that.setInputValue(that.firstNum);
-          } else if (that.state == 2) {
-            that.secondNum += buttonNum;
-            that.setInputValue(that.secondNum);
-          };
-        });
-      };
-    },
-    setReset: function() {
-      var that = this;
-
-      document.getElementById('resetButton').addEventListener('click', function(){
-        that.input.value = 0;
-        that.action = '';
-        that.state = 1;
-        that.firstNum = 0;
-        that.secondNum = 0;
-      });
-    },
-    setPlus: function() {
-      var that = this;
-
-      document.getElementById('plusButton').addEventListener('click', function(){
-        that.firstNum = parseInt(that.input.value);
-        that.setSecondNumberState();
-        that.action = 'plus';
-      });
-    },
-    setMinus: function() {
-      var that = this;
-
-      document.getElementById('minusButton').addEventListener('click', function(){
-        that.firstNum = parseInt(that.input.value);
-        
-        that.setSecondNumberState();
-        that.action = 'minus';        
-      });
-    },
-    setMultiplie: function() {
-      var that = this;
-
-      document.getElementById('multiplieButton').addEventListener('click', function(){
-        that.firstNum = parseInt(that.input.value);
-        
-        that.setSecondNumberState();
-        that.action = 'multiplie';   
-      });
-    },
-    setDivide: function() {
-      var that = this;
-
-      document.getElementById('divideButton').addEventListener('click', function(){
-        that.firstNum = parseInt(that.input.value);
-        
-        that.setSecondNumberState();
-        that.action = 'divide';   
-      });
-    },
-    setEqual: function() {
-      var that = this;
-      
-      document.getElementById('equalButton').addEventListener('click', function(){
-        var result;
-        var firstNumber = parseInt(that.firstNum);
-        var secondNumber = parseInt(that.secondNum);
-
-        if (that.action == 'plus') {
-          result = that.getSum(firstNumber, secondNumber);
-        } else if (that.action == 'minus') {
-          result = that.getDiff(firstNumber, secondNumber);
-        } else if (that.action == 'multiplie') {
-          result = that.getMultiplie(firstNumber,secondNumber);
-        } else if (that.action == 'divide') {
-          result = that.getSplit(firstNumber, secondNumber);
-        };
-
-        that.setInputValue(result);
-        that.firstNum = result;
-      });
-    },
-    setPercentButton: function() {
-      var that = this;
-
-      document.getElementById('percentButton').addEventListener('click', function(){
-        var percent = parseInt(that.firstNum)/100;
-
-        that.setInputValue(percent);
-        that.firstNum = percent;
-      });
-    },
-
-    // init
-    init: function() {
-      this.setInputValue(this.firstNum);
-      this.setNumberButtonListeners();
-
-      this.setReset();
-      this.setPlus();
-      this.setMinus();
-      this.setMultiplie();
-      this.setDivide();
-      this.setEqual();
-      this.setPercentButton();
-    }
-  };
-  // calculator.init();
-
-
+  // TODO
+  // 1 - fractions
+  // 2 - dot as first number
+  // 3 - multilplie actions
 
 
   var calculatorView = {
     setInputValue: function(value) {
-      var inputValue = this.input.value;
-      var newValue = inputValue + value;
 
-      if (newValue.length > 12) {
-        return;
-      };
 
-      // replace first 0 symbol
-      if (inputValue.length == 1 && inputValue.charAt(0)==0) {
-        newValue = newValue.slice(1);
-      };
-
-      this.input.value = newValue;
-
-      return value;
+      this.input.value = value;
     },
     setDot: function() {
       var inputValue = this.input.value;
@@ -194,8 +32,7 @@
     divide: document.getElementById('divideButton'),
     multiplie: document.getElementById('multiplieButton'),
     minus: document.getElementById('minusButton'),
-    plus: document.getElementById('plusButton'),
-    dot: document.getElementById('dotButton')
+    plus: document.getElementById('plusButton')
   };
 
 
@@ -213,19 +50,67 @@
 
   var calculatorControllerFactory = function(model, view, calcBL) {
 
-    // number button
+
+    // this function check '0' symbol as first in umber and
+    // make sure that number is not longer than 12
+    function makeNumber(number, value) {
+
+      var newNumber;
+
+      if (number == 0 && value == 0) {
+        return 0;
+      };
+
+      if (value == '.' && ~number.indexOf('.')) {
+        return number;
+      };
+
+      if (number.length > 11) {
+        return number;
+      };
+
+      newNumber = number + value
+
+      if (number == 0) {
+        newNumber = newNumber.slice(1);
+      };
+
+      return newNumber;
+    };
+
+
+    function setModelState(state, action) {
+      model.state = state;
+      model.action = action;
+    };
+
+
+    // check what number is typing and set it in calculator view
+    function setModelNumber(value) {
+      switch(model.state) {
+        case 1:
+        model.firstNumber = makeNumber(model.firstNumber, value);
+        view.setInputValue(model.firstNumber);
+        break;
+
+        case 2:
+        model.secondNumber = makeNumber(model.secondNumber, value);
+        view.setInputValue(model.secondNumber);
+        break;
+      }
+    };
+
+
+    // number button listeners
     for (var i=0;i<view.number.length;i++) {
       view.number[i].addEventListener('click', function() {
         var number = this.dataset.num;
 
-        view.setInputValue(number);
+        setModelNumber(number);
       });
     };
 
-    // dot button
-    view.dot.addEventListener('click', function() {
-      view.setDot();
-    });
+
 
     // reset button
     view.reset.addEventListener('click', function() {
@@ -236,13 +121,54 @@
       model.action = '';
     });
 
+
     // plus button
     view.plus.addEventListener('click', function() {
-      model.firstNumber = view.getInputValue();
-      model.state = 2;
-
-      console.log(model.firstNumber);
+      setModelState(2, 'plus');
     });
+    // minus button
+    view.minus.addEventListener('click', function() {
+      setModelState(2, 'minus');
+    });
+    // divide button
+    view.multiplie.addEventListener('click', function() {
+      setModelState(2, 'multiplie');
+    });
+    // multiplie button
+    view.divide.addEventListener('click', function() {
+      setModelState(2, 'divide');
+    });
+
+
+    // equal button
+    view.equal.addEventListener('click', function() {
+      var result;
+      var firstNumber = parseFloat(model.firstNumber);
+      var secondNumber = parseFloat(model.secondNumber);
+
+
+      switch(model.action) {
+        case 'plus':
+          result = calcBL.plus(firstNumber, secondNumber);
+          break;
+        case 'minus':
+          result = calcBL.minus(firstNumber, secondNumber);
+          break;
+        case 'multiplie':
+          result = calcBL.multiplie(firstNumber, secondNumber);
+          break;
+        case 'divide':
+          result = calcBL.divide(firstNumber, secondNumber);
+          break;
+      };
+
+      setModelState(1, '');
+      model.firstNumber = result
+      model.secondNumber = 0;
+
+      view.setInputValue(result);
+    });
+
 
     return {
       init: function() {
