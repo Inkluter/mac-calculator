@@ -1,9 +1,15 @@
   // TODO
   // 1 - fractions
-  // 3 - multilplie actions
-  // 2 - percents
+  // 2 - multilplie actions
 
 
+
+
+
+
+
+  // VIEW
+  // ----------------------------
   var calculatorView = {
     setInputValue: function(value) {
 
@@ -25,19 +31,22 @@
       return parseInt(this.input.value);
     },
     number: document.getElementsByClassName('number-button'),
+    action: document.getElementsByClassName('action-button'),
     input: document.getElementById('numbersInput'),
     equal: document.getElementById('equalButton'),
     reset: document.getElementById('resetButton'),
-    percent: document.getElementById('percentButton'),
-    divide: document.getElementById('divideButton'),
-    multiplie: document.getElementById('multiplieButton'),
-    minus: document.getElementById('minusButton'),
-    plus: document.getElementById('plusButton')
+    percent: document.getElementById('percentButton')
   };
 
 
 
 
+
+
+
+
+  // MODEL
+  // ----------------------------
   var calculatorModel = {
     firstNumber: 0,
     secondNumber: 0,
@@ -48,6 +57,13 @@
 
 
 
+
+
+
+
+
+  // CONTROLLER
+  // ----------------------------
   var calculatorControllerFactory = function(model, view, calcBL) {
 
 
@@ -90,10 +106,7 @@
     };
 
 
-    function setModelState(state, action) {
-      model.state = state;
-      model.action = action;
-    };
+    
 
 
     // check what number is typing and set it in calculator view
@@ -113,11 +126,34 @@
 
 
     // number button listeners
-    for (var i=0;i<view.number.length;i++) {
+    for (var i=0; i<view.number.length; i++) {
       view.number[i].addEventListener('click', function() {
         var number = this.dataset.num;
 
         setModelNumber(number);
+      });
+    };
+
+
+    // set moel state
+    function setModelState(state, action) {
+      model.state = state;
+      model.action = action;
+    };
+
+
+    // action button listeners
+    for (var i=0; i<view.action.length; i++) {
+      view.action[i].addEventListener('click', function() {
+        var action = this.dataset.action;
+
+        if (action == 'minus' && model.firstNumber === 0) {
+          setModelNumber('-');
+
+          return;
+        };
+
+        setModelState(2, action);
       });
     };
 
@@ -140,31 +176,12 @@
     });
 
 
-    // plus button
-    view.plus.addEventListener('click', function() {
-
-      if (model.state == 1) {
-        setModelState(2, 'plus');
-      } else if (model.state == 2) {
-        console.log('!!!');
-      }
-    });
-    // minus button
-    view.minus.addEventListener('click', function() {
-      setModelState(2, 'minus');
-    });
-    // divide button
-    view.multiplie.addEventListener('click', function() {
-      setModelState(2, 'multiplie');
-    });
-    // multiplie button
-    view.divide.addEventListener('click', function() {
-      setModelState(2, 'divide');
-    });
-
-
     // equal button
     view.equal.addEventListener('click', function() {
+      if (model.state == 1) {
+        return;
+      };
+
       var result;
       var firstNumber = parseFloat(model.firstNumber);
       var secondNumber = parseFloat(model.secondNumber);
@@ -205,6 +222,12 @@
 
 
 
+
+
+
+
+  // BUSINESS LOGIC
+  // ----------------------------
   var calculatorBLfactory = function(model) {
 
     return {

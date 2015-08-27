@@ -68,13 +68,13 @@ html, body {
   font-size: 30px;
   font-weight: 100;
 }
-.calculator .action-button {
+.calculator .action-button, .calculator .equal-button {
   background: #f5923e;
   color: #fff;
   font-size: 30px;
   font-weight: 100;
 }
-.calculator .action-button:active {
+.calculator .action-button:active, .calculator .equal-button:active {
   background: #c35f0a;
 }
 .calculator .number-button, .calculator .dot-button {
