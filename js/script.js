@@ -106,6 +106,34 @@
     };
 
 
+
+    function makeEqual() {
+      var result;
+      var firstNumber = parseFloat(model.firstNumber);
+      var secondNumber = parseFloat(model.secondNumber);
+
+
+      switch(model.action) {
+        case 'plus':
+          result = calcBL.plus(firstNumber, secondNumber);
+          break;
+        case 'minus':
+          result = calcBL.minus(firstNumber, secondNumber);
+          break;
+        case 'multiplie':
+          result = calcBL.multiplie(firstNumber, secondNumber);
+          break;
+        case 'divide':
+          result = calcBL.divide(firstNumber, secondNumber);
+          break;
+      };
+
+      
+      model.firstNumber = result
+      model.secondNumber = 0;
+
+      view.setInputValue(result);
+    };
     
 
 
@@ -125,6 +153,15 @@
     };
 
 
+
+    // set moel state
+    function setModelState(state, action) {
+      model.state = state;
+      model.action = action;
+    };
+
+
+
     // number button listeners
     for (var i=0; i<view.number.length; i++) {
       view.number[i].addEventListener('click', function() {
@@ -135,20 +172,22 @@
     };
 
 
-    // set moel state
-    function setModelState(state, action) {
-      model.state = state;
-      model.action = action;
-    };
-
-
+    
     // action button listeners
     for (var i=0; i<view.action.length; i++) {
       view.action[i].addEventListener('click', function() {
         var action = this.dataset.action;
 
+        // make minus number as first
         if (action == 'minus' && model.firstNumber === 0) {
           setModelNumber('-');
+
+          return;
+        };
+
+        if (model.state == 2) {
+          makeEqual();
+          setModelState(2, action);
 
           return;
         };
@@ -182,31 +221,8 @@
         return;
       };
 
-      var result;
-      var firstNumber = parseFloat(model.firstNumber);
-      var secondNumber = parseFloat(model.secondNumber);
-
-
-      switch(model.action) {
-        case 'plus':
-          result = calcBL.plus(firstNumber, secondNumber);
-          break;
-        case 'minus':
-          result = calcBL.minus(firstNumber, secondNumber);
-          break;
-        case 'multiplie':
-          result = calcBL.multiplie(firstNumber, secondNumber);
-          break;
-        case 'divide':
-          result = calcBL.divide(firstNumber, secondNumber);
-          break;
-      };
-
+      makeEqual();
       setModelState(1, '');
-      model.firstNumber = result
-      model.secondNumber = 0;
-
-      view.setInputValue(result);
     });
 
 
